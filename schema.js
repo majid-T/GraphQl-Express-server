@@ -12,15 +12,6 @@ const {
   GraphQLNonNull,
 } = require("graphql");
 
-const CustomerType = new GraphQLObjectType({
-  name: "Customer",
-  fields: () => ({
-    id: { type: GraphQLString },
-    name: { type: GraphQLString },
-    email: { type: GraphQLString },
-    age: { type: GraphQLInt },
-  }),
-});
 const ContactType = new GraphQLObjectType({
   name: "Contact",
   fields: () => ({
@@ -126,16 +117,12 @@ const mutation = new GraphQLObjectType({
           _id: new mongoDb.ObjectID(args._id),
         });
 
-        console.log("Before:", targetContact);
-
         targetContact.name = args.name || targetContact.name;
         targetContact.lastName = args.lastName || targetContact.lastName;
         targetContact.email = args.email || targetContact.email;
         targetContact.cellNo = args.cellNo || targetContact.cellNo;
         targetContact.homeNo = args.homeNo || targetContact.homeNo;
         targetContact.workNo = args.workNo || targetContact.workNo;
-
-        console.log("After", targetContact);
 
         const result = await connection.updateOne(
           {
@@ -153,6 +140,7 @@ const mutation = new GraphQLObjectType({
     },
   },
 });
+
 //Geting Our MongoDb -- custom function
 async function loadMongoDbConnection() {
   const client = await mongoDb.MongoClient.connect(dbUri, {
